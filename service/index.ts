@@ -1,6 +1,7 @@
 import type { IOnCompleted, IOnData, IOnError, IOnFile, IOnMessageEnd, IOnMessageReplace, IOnNodeFinished, IOnNodeStarted, IOnThought, IOnWorkflowFinished, IOnWorkflowStarted } from './base'
-import { get, post, ssePost } from './base'
+import { get, post, del, ssePost } from './base'
 import type { Feedbacktype } from '@/types/app'
+import {getUser} from "@/utils/local";
 
 export const sendChatMessage = async (
   body: Record<string, any>,
@@ -41,11 +42,11 @@ export const sendChatMessage = async (
 }
 
 export const fetchConversations = async () => {
-  return get('conversations', { params: { limit: 100, first_id: '' } })
+  return get('conversations', { params: { limit: 100, first_id: '', user: getUser() } })
 }
 
 export const fetchChatList = async (conversationId: string) => {
-  return get('messages', { params: { conversation_id: conversationId, limit: 20, last_id: '' } })
+  return get('messages', { params: { conversation_id: conversationId, limit: 20, last_id: '', user: getUser() } })
 }
 
 // init value. wait for server update
@@ -54,9 +55,13 @@ export const fetchAppParams = async () => {
 }
 
 export const updateFeedback = async ({ url, body }: { url: string; body: Feedbacktype }) => {
-  return post(url, { body })
+  return post(url, { body: {...body, user: getUser()} })
 }
 
-export const generationConversationName = async (id: string) => {
-  return post(`conversations/${id}/name`, { body: { auto_generate: true } })
+export const generationConversationName = async (id: string, name?: string) => {
+  return post(`conversations/${id}/name`, { body: { auto_generate: !name, user: getUser(), name } })
+}
+
+export const deleteConversations = async (id: string) => {
+  return del(`conversations/${id}`, { body: { user: getUser() } })
 }

@@ -10,7 +10,7 @@ import Toast from '@/app/components/base/toast'
 import Sidebar from '@/app/components/sidebar'
 import ConfigSence from '@/app/components/config-scence'
 import Header from '@/app/components/header'
-import { fetchAppParams, fetchChatList, fetchConversations, generationConversationName, sendChatMessage, updateFeedback } from '@/service'
+import {deleteConversations, fetchAppParams, fetchChatList, fetchConversations, generationConversationName, sendChatMessage, updateFeedback} from '@/service'
 import type { ChatItem, ConversationItem, Feedbacktype, PromptConfig, VisionFile, VisionSettings } from '@/types/app'
 import { Resolution, TransferMethod, WorkflowRunningStatus } from '@/types/app'
 import Chat from '@/app/components/chat'
@@ -22,6 +22,10 @@ import AppUnavailable from '@/app/components/app-unavailable'
 import { API_KEY, APP_ID, APP_INFO, isShowPrompt, promptTemplate } from '@/config'
 import type { Annotation as AnnotationType } from '@/types/log'
 import { addFileInfos, sortAgentSorts } from '@/utils/tools'
+import {getUser} from "@/utils/local";
+import { Modal, Input } from 'antd';
+
+const { confirm } = Modal;
 
 export type IMainProps = {
   params: any
@@ -167,6 +171,28 @@ const Main: FC<IMainProps> = () => {
     // trigger handleConversationSwitch
     setCurrConversationId(id, APP_ID)
     hideSidebar()
+  }
+
+  const freshConversations = async (itemId?: string) => {
+    setCurrConversationId('-1', APP_ID, true)
+    const { data: allConversations }: any = await fetchConversations()
+    setConversationList(allConversations as any)
+    setConversationIdChangeBecauseOfNew(true)
+  }
+
+  const handleConversationTrash = async (id: string) => {
+    if (id !== '-1') {
+      confirm({
+        title: '删除对话', content: '您确定要删除此对话吗？',
+        okText: '确认', cancelText: '取消',
+        onOk() {
+          deleteConversations(id).then((res: any) => {
+            notify({type: 'success', message: res.message})
+            freshConversations(id);
+          })
+        }
+      });
+    }
   }
 
   /*
@@ -335,6 +361,7 @@ const Main: FC<IMainProps> = () => {
       inputs: currInputs,
       query: message,
       conversation_id: isNewConversation ? null : currConversationId,
+      user: getUser()
     }
 
     if (visionConfig?.enabled && files && files?.length > 0) {
@@ -599,6 +626,44 @@ const Main: FC<IMainProps> = () => {
     notify({ type: 'success', message: t('common.api.success') })
   }
 
+  const [reNameState, setReNameState] = useState<boolean>(false)
+  const [reNameId, setReNameId] = useState<string>('');
+  const [reNameVal, setReNameVal] = useState<string>('');
+
+  const handleConversationName = async (id: string, value: string) => {
+    setReNameId(id);
+    setReNameState(true)
+    setReNameVal(value.trim())
+  }
+
+  const handleReName = async () => {
+    if (!reNameVal || !reNameVal.length) {
+      Toast.notify({ type: 'error', message: "请输入会话名称" })
+      return;
+    }
+
+    const newItem: any = await generationConversationName(reNameId, reNameVal)
+    const newAllConversations = produce(conversationList, (draft: any) => {
+      // 查找 id 等于 reNameId 的数据
+      const targetItem = draft.find((item: any) => item.id === reNameId);
+      if (targetItem) {
+        // 更新目标对象的 name 属性
+        targetItem.name = newItem.name;
+      } else {
+        console.warn(`未找到 id 为 ${reNameId} 的会话`);
+      }
+    })
+    setConversationList(newAllConversations as any)
+    setReNameState(false)
+    setReNameId("");
+    setReNameVal("")
+  }
+
+  // 处理输入框值变化
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setReNameVal(e.target.value.trim());
+  };
+
   const renderSidebar = () => {
     if (!APP_ID || !APP_INFO || !promptConfig)
       return null
@@ -606,6 +671,8 @@ const Main: FC<IMainProps> = () => {
       <Sidebar
         list={conversationList}
         onCurrentIdChange={handleConversationIdChange}
+        onCurrentIdTrash={handleConversationTrash}
+        onCurrentIdReName={handleConversationName}
         currentId={currConversationId}
         copyRight={APP_INFO.copyright || APP_INFO.title}
       />
@@ -670,6 +737,15 @@ const Main: FC<IMainProps> = () => {
           }
         </div>
       </div>
+
+      <Modal title="重命名会话" open={reNameState} onOk={handleReName} onCancel={()=>{
+        setReNameState(false)
+        setReNameVal("")
+        setReNameId("")
+      }} okText={'保存'} cancelText={'取消'}>
+        <p style={{marginTop: '1.6rem', marginBottom: '0.5rem'}}>会话名称</p>
+        <Input placeholder="请输入会话名称" variant="filled" size="large" value={reNameVal} onChange={handleInputChange} style={{marginBottom: '3rem'}}/>
+      </Modal>
     </div>
   )
 }

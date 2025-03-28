@@ -13,6 +13,10 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 
+    --primray-rgb: 229, 57, 53;
+    --primray-color: rgb(var(--primray-rgb));
+    --primray-color-lighten-2: #E57373;
+
   --primary-glow: conic-gradient(from 180deg at 50% 50%,
       #16abff33 0deg,
       #0885ff33 55deg,
@@ -126,3 +130,84 @@ a {
   background-clip: text;
   text-fill-color: transparent;
 }
+
+/*antd*/
+:where(.css-dev-only-do-not-override-1a3rktk).ant-btn-variant-solid {
+    background-color: var(--primray-color);
+}
+
+:where(.css-dev-only-do-not-override-1a3rktk).ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover {
+    background-color: var(--primray-color);
+}
+
+:where(.css-dev-only-do-not-override-1a3rktk).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover, :where(.css-dev-only-do-not-override-1a3rktk).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover {
+    color: var(--primray-color);
+    border-color: var(--primray-color);
+}
+
+/*覆盖样式*/
+.text-primary-600 {
+    color: rgba(var(--primray-rgb), 1);
+}
+
+.bg-primary-50 {
+    background-color: rgba(var(--primray-rgb), 0.1);
+}
+
+.bg-indigo-25 {
+    background-color: rgba(var(--primray-rgb), 0.1);
+}
+
+.bg-primary-600 {
+    background-color: var(--primray-color);
+}
+
+.hover\:bg-primary-600\/75:hover {
+    background-color: rgba(var(--primray-rgb), 0.75) !important;
+}
+
+/*悬浮按钮*/
+.ai-modal.md {
+    width: 92% !important;
+
+    .ant-modal-content {
+        padding: 0 !important;
+    }
+}
+
+/*左侧栏的操作按钮*/
+.conversation-item {
+    position: relative;
+}
+
+.conversation-btn {
+    display: none;
+    flex-shrink: 0;
+    height: 1.1rem;
+    margin-left: 0.75rem;
+    white-space: nowrap;
+    position: absolute;
+    right: 0.6rem;
+}
+
+.conversation-item:hover .conversation-btn {
+    display: block;
+}
+
+.conversation-btn button {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-left: 0.2rem;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.conversation-btn svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: var(--primray-color);
+}
+
+

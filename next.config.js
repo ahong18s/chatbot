@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone', // 确认该配置存在
   productionBrowserSourceMaps: false, // enable browser source map generation during the production build
   // Configure pageExtensions to include md and mdx
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   experimental: {
     // appDir: true,
+    isrMemoryCacheSize: 200, // MB
   },
   // fix all before production. Now it slow the develop speed.
   eslint: {

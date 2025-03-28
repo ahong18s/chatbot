@@ -2,6 +2,7 @@ import { API_PREFIX } from '@/config'
 import Toast from '@/app/components/base/toast'
 import type { AnnotationReply, MessageEnd, MessageReplace, ThoughtItem } from '@/app/components/chat/type'
 import type { VisionFile } from '@/types/app'
+import { API_KEY } from '@/config'
 
 const TIME_OUT = 100000
 
@@ -18,6 +19,7 @@ const baseOptions = {
   credentials: 'include', // always send cookies、HTTP Basic authentication.
   headers: new Headers({
     'Content-Type': ContentType.json,
+    'Authorization': 'Bearer ' + API_KEY
   }),
   redirect: 'follow',
 }
