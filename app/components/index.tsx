@@ -39,14 +39,13 @@ const Main: FC<IMainProps> = () => {
 
   // 动态设置 CSS 变量的组件
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const hexColor = queryParams.get('themeColor'); // 获取 ?themeColor 参数
-    console.log('queryParams', queryParams)
-    console.log('hexColor', hexColor)
-    if (typeof window !== 'undefined' && hexColor) {
-      const rgbColor = hexToRgb(hexColor);
-      console.log('rgbColor', rgbColor)
-      rgbColor && document.documentElement.style.setProperty('--primray-rgb', rgbColor);
+    if (typeof window !== 'undefined') {
+      const queryParams = new URLSearchParams(window.location.search);
+      const hexColor = queryParams.get('themeColor'); // 获取 ?themeColor 参数
+      if (hexColor) {
+        const rgbColor = hexToRgb(hexColor);
+        rgbColor && document.documentElement.style.setProperty('--primray-rgb', rgbColor);
+      }
     }
   }, []);
 

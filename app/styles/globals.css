@@ -144,6 +144,23 @@ a {
     border-color: var(--primray-color);
 }
 
+:where(.css-1a3rktk).ant-btn-variant-solid {
+    background: var(--primray-color);
+}
+
+:where(.css-1a3rktk).ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover {
+    background: var(--primray-color);
+}
+
+:where(.css-1a3rktk).ant-input-filled:focus, :where(.css-1a3rktk).ant-input-filled:focus-within {
+    border-color: var(--primray-color);
+}
+
+:where(.css-1a3rktk).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover, :where(.css-1a3rktk).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover {
+    color: var(--primray-color);
+    border-color: var(--primray-color);
+}
+
 /*覆盖样式*/
 .text-primary-600 {
     color: rgba(var(--primray-rgb), 1);
