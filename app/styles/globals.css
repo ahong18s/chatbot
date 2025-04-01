@@ -15,7 +15,6 @@
 
     --primray-rgb: 229, 57, 53;
     --primray-color: rgb(var(--primray-rgb));
-    --primray-color-lighten-2: #E57373;
 
   --primary-glow: conic-gradient(from 180deg at 50% 50%,
       #16abff33 0deg,

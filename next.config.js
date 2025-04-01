@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone', // 确认该配置存在
+  distDir: '.next', // 自定义输出目录
+  reactStrictMode: true,
+  assetPrefix: "/",
+  // trailingSlash: true, // 确保 URL 路径规范
   productionBrowserSourceMaps: false, // enable browser source map generation during the production build
   // Configure pageExtensions to include md and mdx
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],

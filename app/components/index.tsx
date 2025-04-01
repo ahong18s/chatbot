@@ -37,6 +37,27 @@ const Main: FC<IMainProps> = () => {
   const isMobile = media === MediaType.mobile
   const hasSetAppConfig = APP_ID && API_KEY
 
+  // 动态设置 CSS 变量的组件
+  useEffect(() => {
+    const hexColor = process.env.NEXT_PUBLIC_THEME_COLOR;
+    if (typeof window !== 'undefined' && hexColor) {
+      const rgbColor = hexToRgb(hexColor);
+      rgbColor && document.documentElement.style.setProperty('--primray-rgb', rgbColor);
+    }
+  }, []);
+
+  // 十六进制转 RGB 的函数
+  function hexToRgb(hex: any) {
+    hex = hex.replace(/^#/, '');
+    if (hex.length === 3) {
+      hex = hex.split('').map((char: any) => char + char).join('');
+    }
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    return `${r},${g},${b}`;
+  }
+
   /*
   * app info
   */
@@ -55,7 +76,7 @@ const Main: FC<IMainProps> = () => {
 
   useEffect(() => {
     if (APP_INFO?.title)
-      document.title = `${APP_INFO.title} - Powered by Dify`
+      document.title = `${APP_INFO.title}`
   }, [APP_INFO?.title])
 
   // onData change thought (the produce obj). https://github.com/immerjs/immer/issues/576
