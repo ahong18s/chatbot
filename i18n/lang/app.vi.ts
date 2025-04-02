@@ -22,6 +22,8 @@ const translation = {
       'chính sách bảo mật',
     privacyPolicyRight:
       ' được cung cấp bởi nhà phát triển ứng dụng.',
+    thought: 'Tư duy',
+    thinking: 'Suy nghĩ...',
   },
   errorMessage: {
     valueOfVarRequired: 'Giá trị của biến không thể để trống',

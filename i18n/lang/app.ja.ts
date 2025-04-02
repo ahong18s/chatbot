@@ -22,6 +22,8 @@ const translation = {
       'プライバシーポリシー',
     privacyPolicyRight:
       ' をお読みください。',
+    thought: '思考',
+    thinking: '考え中...',
   },
   errorMessage: {
     valueOfVarRequired: '変数の値は空にできません',

@@ -22,6 +22,8 @@ const translation = {
       'política de privacidad',
     privacyPolicyRight:
       ' proporcionada por el desarrollador de la aplicación.',
+    thinking: 'Pensamiento...',
+    thought: 'Pensamiento',
   },
   errorMessage: {
     valueOfVarRequired: 'El valor de las variables no puede estar vacío',
