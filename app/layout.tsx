@@ -1,5 +1,6 @@
 import { getLocaleOnServer } from '@/i18n/server'
 
+import 'antd/dist/antd.css';
 import './styles/globals.css'
 import './styles/markdown.scss'
 

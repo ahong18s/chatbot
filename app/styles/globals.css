@@ -131,33 +131,40 @@ a {
 }
 
 /*antd*/
-:where(.css-dev-only-do-not-override-1a3rktk).ant-btn-variant-solid {
-    background-color: var(--primray-color);
-}
-
-:where(.css-dev-only-do-not-override-1a3rktk).ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover {
-    background-color: var(--primray-color);
-}
-
-:where(.css-dev-only-do-not-override-1a3rktk).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover, :where(.css-dev-only-do-not-override-1a3rktk).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover {
+.ant-btn:hover, .ant-btn:focus {
     color: var(--primray-color);
     border-color: var(--primray-color);
 }
 
-:where(.css-1a3rktk).ant-btn-variant-solid {
+.ant-btn-primary {
     background: var(--primray-color);
-}
-
-:where(.css-1a3rktk).ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover {
-    background: var(--primray-color);
-}
-
-:where(.css-1a3rktk).ant-input-filled:focus, :where(.css-1a3rktk).ant-input-filled:focus-within {
     border-color: var(--primray-color);
 }
 
-:where(.css-1a3rktk).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover, :where(.css-1a3rktk).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover {
-    color: var(--primray-color);
+.ant-btn-primary:active {
+    color: #ffffff;
+    background: var(--primray-color);
+}
+
+.ant-btn-primary:hover, .ant-btn-primary:focus {
+    color: #ffffff;
+    background: var(--primray-color);
+}
+
+.ant-modal-content {
+    border-radius: 8px;
+}
+
+.ant-modal-header {
+    border-radius: 8px 8px 0 0;
+}
+
+.ant-input:focus, .ant-input-focused {
+    border-color: var(--primray-color);
+    box-shadow: 0 0 0 2px rgba(var(--primray-rgb), 0.2);
+}
+
+.ant-input:hover {
     border-color: var(--primray-color);
 }
 

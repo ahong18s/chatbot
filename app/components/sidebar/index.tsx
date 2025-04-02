@@ -20,7 +20,7 @@ export type ISidebarProps = {
   copyRight: string
   currentId: string
   onCurrentIdChange: (id: string) => void
-  onCurrentIdTrash: (id: string) => void
+  onCurrentIdTrash: (id: string, name: string) => void
   onCurrentIdReName: (id: string, name: string) => void
   list: ConversationItem[]
 }
@@ -87,7 +87,7 @@ const Sidebar: FC<ISidebarProps> = ({
                 </button>
                 <button datatype={'trash'} title={'删除'} onClick={(e) => {
                   e.stopPropagation();
-                  onCurrentIdTrash(item.id)
+                  onCurrentIdTrash(item.id, item.name)
                 }}>
                   <svg d="1743056175295" className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1742" width="200" height="200">
                     <path d="M607.897867 768.043004c-17.717453 0-31.994625-14.277171-31.994625-31.994625L575.903242 383.935495c0-17.717453 14.277171-31.994625 31.994625-31.994625s31.994625 14.277171 31.994625 31.994625l0 351.94087C639.892491 753.593818 625.61532 768.043004 607.897867 768.043004z"

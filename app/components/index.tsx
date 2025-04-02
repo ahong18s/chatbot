@@ -197,28 +197,6 @@ const Main: FC<IMainProps> = () => {
     hideSidebar()
   }
 
-  const freshConversations = async (itemId?: string) => {
-    setCurrConversationId('-1', APP_ID, true)
-    const { data: allConversations }: any = await fetchConversations()
-    setConversationList(allConversations as any)
-    setConversationIdChangeBecauseOfNew(true)
-  }
-
-  const handleConversationTrash = async (id: string) => {
-    if (id !== '-1') {
-      confirm({
-        title: '删除对话', content: '您确定要删除此对话吗？',
-        okText: '确认', cancelText: '取消',
-        onOk() {
-          deleteConversations(id).then((res: any) => {
-            notify({type: 'success', message: res.message})
-            freshConversations(id);
-          })
-        }
-      });
-    }
-  }
-
   /*
   * chat info. chat is under conversation.
   */
@@ -654,10 +632,38 @@ const Main: FC<IMainProps> = () => {
   const [reNameId, setReNameId] = useState<string>('');
   const [reNameVal, setReNameVal] = useState<string>('');
 
+  const freshConversations = async (itemId?: string) => {
+    setCurrConversationId('-1', APP_ID, true)
+    const { data: allConversations }: any = await fetchConversations()
+    setConversationList(allConversations as any)
+    setConversationIdChangeBecauseOfNew(true)
+  }
+
+  const handleConversationTrash = async (id: string, name?: string) => {
+    if (id !== '-1') {
+      confirm({
+        title: '删除对话', content: '您确定要删除此对话吗？',
+        okText: '确认', cancelText: '取消',
+        onOk() {
+          deleteConversations(id).then((res: any) => {
+            notify({type: 'success', message: res.message || '删除成功'})
+            freshConversations(id);
+          })
+        }
+      });
+    }
+  }
+
   const handleConversationName = async (id: string, value: string) => {
-    setReNameId(id);
     setReNameState(true)
+    setReNameId(id);
     setReNameVal(value.trim())
+  }
+
+  const closeReName = () => {
+    setReNameState(false)
+    setReNameId("")
+    setReNameVal("")
   }
 
   const handleReName = async () => {
@@ -678,9 +684,8 @@ const Main: FC<IMainProps> = () => {
       }
     })
     setConversationList(newAllConversations as any)
-    setReNameState(false)
-    setReNameId("");
-    setReNameVal("")
+    closeReName()
+    notify({type: 'success', message: '重命名成功'})
   }
 
   // 处理输入框值变化
@@ -762,13 +767,9 @@ const Main: FC<IMainProps> = () => {
         </div>
       </div>
 
-      <Modal title="重命名会话" open={reNameState} onOk={handleReName} onCancel={()=>{
-        setReNameState(false)
-        setReNameVal("")
-        setReNameId("")
-      }} okText={'保存'} cancelText={'取消'}>
-        <p style={{marginTop: '1.6rem', marginBottom: '0.5rem'}}>会话名称</p>
-        <Input placeholder="请输入会话名称" variant="filled" size="large" value={reNameVal} onChange={handleInputChange} style={{marginBottom: '3rem'}}/>
+      <Modal title="重命名会话" open={reNameState} onOk={handleReName} onCancel={() => closeReName()} okText={'保存'} cancelText={'取消'}>
+        <p style={{marginBottom: '0.5rem'}}>会话名称</p>
+        <Input placeholder="请输入会话名称" size="large" value={reNameVal} onChange={handleInputChange} style={{marginBottom: '1rem'}}/>
       </Modal>
     </div>
   )
