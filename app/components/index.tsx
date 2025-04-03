@@ -453,7 +453,7 @@ const Main: FC<IMainProps> = () => {
 
         if (getConversationIdChangeBecauseOfNew()) {
           const { data: allConversations }: any = await fetchConversations()
-          const newItem: any = await generationConversationName(allConversations[0].id)
+          const newItem: any = await generationConversationName(allConversations[0].id, data.query.substring(0, 12) || '新的对话')
 
           const newAllConversations = produce(allConversations, (draft: any) => {
             draft[0].name = newItem.name

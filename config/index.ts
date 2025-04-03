@@ -3,8 +3,8 @@ export const APP_ID = `${process.env.NEXT_PUBLIC_APP_ID}`
 export const API_KEY = `${process.env.NEXT_PUBLIC_APP_KEY}`
 export const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
 export const APP_INFO: AppInfo = {
-  title: '聊天助手',
-  description: '这是一个专注于聊天的AI应用',
+  title: process.env.NEXT_PUBLIC_APP_TITLE || 'AI应用',
+  description: process.env.NEXT_PUBLIC_APP_DESC || '这是一个专注于聊天的AI应用',
   copyright: '',
   privacy_policy: '',
   default_language: 'zh-Hans',
