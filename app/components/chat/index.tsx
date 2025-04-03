@@ -15,6 +15,7 @@ import Toast from '@/app/components/base/toast'
 import ChatImageUploader from '@/app/components/base/image-uploader/chat-image-uploader'
 import ImageList from '@/app/components/base/image-uploader/image-list'
 import { useImageFiles } from '@/app/components/base/image-uploader/hooks'
+import { StopCircle } from '@/app/components/base/icons/solid/mediaAndDevices'
 
 export type IChatProps = {
   chatList: ChatItem[]
@@ -32,6 +33,8 @@ export type IChatProps = {
   useCurrentUserAvatar?: boolean
   isResponding?: boolean
   controlClearQuery?: number
+  messageTaskId?: string
+  onStopResponding?: () => void
   visionConfig?: VisionSettings
 }
 
@@ -45,7 +48,9 @@ const Chat: FC<IChatProps> = ({
   useCurrentUserAvatar,
   isResponding,
   controlClearQuery,
+  onStopResponding,
   visionConfig,
+  messageTaskId,
 }) => {
   const { t } = useTranslation()
   const { notify } = Toast
@@ -146,6 +151,16 @@ const Chat: FC<IChatProps> = ({
       {
         !isHideSendInput && (
           <div className={cn(!feedbackDisabled && '!left-3.5 !right-3.5', 'absolute z-10 bottom-0 left-0 right-0')}>
+            {
+              isResponding && Boolean(messageTaskId) && (
+                <div className='flex justify-center mb-2'>
+                  <button className='text-nowrap block px-3.5 py-1 rounded-md border border-slate-300' onClick={onStopResponding}>
+                    <StopCircle className='inline-block mr-[5px] w-3.5 h-3.5 text-gray-500' />
+                    <span className='text-xs text-gray-500 font-normal'>{t('common.operation.stopResponding')}</span>
+                  </button>
+                </div>
+              )
+            }
             <div className='p-[5.5px] max-h-[150px] bg-white border-[1.5px] border-gray-200 rounded-xl overflow-y-auto'>
               {
                 visionConfig?.enabled && (

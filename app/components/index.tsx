@@ -10,7 +10,7 @@ import Toast from '@/app/components/base/toast'
 import Sidebar from '@/app/components/sidebar'
 import ConfigSence from '@/app/components/config-scence'
 import Header from '@/app/components/header'
-import {deleteConversations, fetchAppParams, fetchChatList, fetchConversations, generationConversationName, sendChatMessage, updateFeedback} from '@/service'
+import {deleteConversations, fetchAppParams, fetchChatList, fetchConversations, generationConversationName, sendChatMessage, stopChatMessageResponding, updateFeedback} from '@/service'
 import type { ChatItem, ConversationItem, Feedbacktype, PromptConfig, VisionFile, VisionSettings } from '@/types/app'
 import { Resolution, TransferMethod, WorkflowRunningStatus } from '@/types/app'
 import Chat from '@/app/components/chat'
@@ -632,11 +632,16 @@ const Main: FC<IMainProps> = () => {
   const [reNameId, setReNameId] = useState<string>('');
   const [reNameVal, setReNameVal] = useState<string>('');
 
-  const freshConversations = async (itemId?: string) => {
-    setCurrConversationId('-1', APP_ID, true)
+  const handleStop = () => {
+    stopChatMessageResponding(messageTaskId).then((res: any) => {
+      abortController?.abort()
+      notify({type: 'success', message: res.message || '停止响应'})//测试输出——TODO
+    })
+  }
+
+  const freshConversations = async () => {
     const { data: allConversations }: any = await fetchConversations()
     setConversationList(allConversations as any)
-    setConversationIdChangeBecauseOfNew(true)
   }
 
   const handleConversationTrash = async (id: string, name?: string) => {
@@ -647,7 +652,12 @@ const Main: FC<IMainProps> = () => {
         onOk() {
           deleteConversations(id).then((res: any) => {
             notify({type: 'success', message: res.message || '删除成功'})
-            freshConversations(id);
+            freshConversations();
+            setCurrConversationId('-1', APP_ID, true)
+            setConversationIdChangeBecauseOfNew(false)
+            resetNewConversationInputs()
+            setChatNotStarted()
+            setRespondingFalse()
           })
         }
       });
@@ -673,7 +683,8 @@ const Main: FC<IMainProps> = () => {
     }
 
     const newItem: any = await generationConversationName(reNameId, reNameVal)
-    const newAllConversations = produce(conversationList, (draft: any) => {
+    const { data: allConversations }: any = await fetchConversations()
+    const newAllConversations = produce(allConversations, (draft: any) => {
       // 查找 id 等于 reNameId 的数据
       const targetItem = draft.find((item: any) => item.id === reNameId);
       if (targetItem) {
@@ -685,6 +696,10 @@ const Main: FC<IMainProps> = () => {
     })
     setConversationList(newAllConversations as any)
     closeReName()
+    setExistConversationInfo({
+      name: newItem.name,
+      introduction: currConversationInfo?.introduction || '',
+    })
     notify({type: 'success', message: '重命名成功'})
   }
 
@@ -759,6 +774,8 @@ const Main: FC<IMainProps> = () => {
                     onFeedback={handleFeedback}
                     isResponding={isResponding}
                     checkCanSend={checkCanSend}
+                    messageTaskId={messageTaskId}
+                    onStopResponding={handleStop}
                     visionConfig={visionConfig}
                   />
                 </div>

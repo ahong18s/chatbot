@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const hasEndThink = (children: any): boolean => {
@@ -35,40 +35,40 @@ const removeEndThink = (children: any): any => {
 }
 
 const useThinkTimer = (children: any) => {
-  const [startTime] = useState(Date.now())
-  const [elapsedTime, setElapsedTime] = useState(0)
+  // const [startTime] = useState(Date.now())
+  // const [elapsedTime, setElapsedTime] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout>()
+  // const timerRef = useRef<NodeJS.Timeout>()
 
-  useEffect(() => {
-    try {
-      clearInterval(timerRef.current)
-    } catch (e) {
-    }
-    timerRef.current = setInterval(() => {
-      if (!isComplete)
-        setElapsedTime(Math.floor((Date.now() - startTime) / 100) / 10)
-    }, 100)
-
-    return () => {
-      if (timerRef.current)
-        clearInterval(timerRef.current)
-    }
-  }, [startTime, isComplete])
+  // useEffect(() => {
+  //   try {
+  //     clearInterval(timerRef.current)
+  //   } catch (e) {
+  //   }
+  //   timerRef.current = setInterval(() => {
+  //     if (!isComplete)
+  //       setElapsedTime(Math.floor((Date.now() - startTime) / 100) / 10)
+  //   }, 100)
+  //
+  //   return () => {
+  //     if (timerRef.current)
+  //       clearInterval(timerRef.current)
+  //   }
+  // }, [startTime, isComplete])
 
   useEffect(() => {
     if (hasEndThink(children)) {
       setIsComplete(true)
-      if (timerRef.current)
-        clearInterval(timerRef.current)
+      // if (timerRef.current)
+      //   clearInterval(timerRef.current)
     }
   }, [children])
 
-  return { elapsedTime, isComplete }
+  return { isComplete }
 }
 
 export const ThinkBlock = ({ children, ...props }: any) => {
-  const { elapsedTime, isComplete } = useThinkTimer(children)
+  const { isComplete } = useThinkTimer(children)
   const displayContent = removeEndThink(children)
   const { t } = useTranslation()
 
@@ -92,7 +92,7 @@ export const ThinkBlock = ({ children, ...props }: any) => {
               d="M9 5l7 7-7 7"
             />
           </svg>
-          {isComplete ? `${t('app.chat.thought')}(${elapsedTime.toFixed(1)}s)` : `${t('app.chat.thinking')}(${elapsedTime.toFixed(1)}s)`}
+          {isComplete ? `${t('app.chat.thought')}` : `${t('app.chat.thinking')}`}
         </div>
       </summary>
       <div className="text-gray-500 p-3 ml-2 bg-gray-50 border-l border-gray-300">

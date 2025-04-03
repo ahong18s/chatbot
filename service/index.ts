@@ -65,3 +65,7 @@ export const generationConversationName = async (id: string, name?: string) => {
 export const deleteConversations = async (id: string) => {
   return del(`conversations/${id}`, { body: { user: getUser() } })
 }
+
+export const stopChatMessageResponding = async (taskId: string) => {
+  return post(`chat-messages/${taskId}/stop`, { body: { user: getUser() }})
+}
