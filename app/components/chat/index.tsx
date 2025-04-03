@@ -154,7 +154,7 @@ const Chat: FC<IChatProps> = ({
             {
               isResponding && Boolean(messageTaskId) && (
                 <div className='flex justify-center mb-2'>
-                  <button className='text-nowrap block px-3.5 py-1 rounded-md border border-slate-300' onClick={onStopResponding}>
+                  <button className='text-nowrap bg-white block px-3.5 py-1 rounded-md border border-slate-300' onClick={onStopResponding}>
                     <StopCircle className='inline-block mr-[5px] w-3.5 h-3.5 text-gray-500' />
                     <span className='text-xs text-gray-500 font-normal'>{t('common.operation.stopResponding')}</span>
                   </button>

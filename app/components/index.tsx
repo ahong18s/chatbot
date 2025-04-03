@@ -713,6 +713,7 @@ const Main: FC<IMainProps> = () => {
       return null
     return (
       <Sidebar
+        isResponding={isResponding}
         list={conversationList}
         onCurrentIdChange={handleConversationIdChange}
         onCurrentIdTrash={handleConversationTrash}

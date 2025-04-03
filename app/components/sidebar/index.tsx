@@ -23,6 +23,7 @@ export type ISidebarProps = {
   onCurrentIdTrash: (id: string, name: string) => void
   onCurrentIdReName: (id: string, name: string) => void
   list: ConversationItem[]
+  isResponding: boolean
 }
 
 const Sidebar: FC<ISidebarProps> = ({
@@ -32,6 +33,7 @@ const Sidebar: FC<ISidebarProps> = ({
   onCurrentIdTrash,
   onCurrentIdReName,
   list,
+  isResponding,
 }) => {
   const { t } = useTranslation()
   return (
@@ -41,6 +43,7 @@ const Sidebar: FC<ISidebarProps> = ({
       {list.length < MAX_CONVERSATION_LENTH && (
         <div className="flex flex-shrink-0 p-4 !pb-0">
           <Button
+            disabled={isResponding}
             onClick={() => { onCurrentIdChange('-1') }}
             className="group block w-full flex-shrink-0 !justify-start !h-9 text-primary-600 items-center text-sm">
             <PencilSquareIcon className="mr-2 h-4 w-4" /> {t('app.chat.newChat')}
@@ -55,13 +58,18 @@ const Sidebar: FC<ISidebarProps> = ({
             = isCurrent ? ChatBubbleOvalLeftEllipsisSolidIcon : ChatBubbleOvalLeftEllipsisIcon
           return (
             <div
-              onClick={() => onCurrentIdChange(item.id)}
+              onClick={() => {
+                if (!isResponding) {
+                  onCurrentIdChange(item.id)
+                }
+              }}
               key={item.id}
               className={classNames(
                 isCurrent
                   ? 'bg-primary-50 text-primary-600'
                   : 'text-gray-700 hover:bg-gray-100 hover:text-gray-700',
-                'group flex items-center rounded-md px-2 py-2 text-sm font-medium cursor-pointer conversation-item',
+                'group flex items-center rounded-md px-2 py-2 text-sm font-medium conversation-item',
+                isResponding ? 'cursor-not-allowed' : 'cursor-pointer'
               )}
             >
               <ItemIcon
@@ -75,20 +83,22 @@ const Sidebar: FC<ISidebarProps> = ({
               />
               {item.name}
               {item.id && item.id !== '-1' ? (<div className={'conversation-btn'}>
-                <button datatype={'rename'} title={'改名'} onClick={(e) => {
-                  e.stopPropagation();
-                  onCurrentIdReName(item.id, item.name)
-                }}>
+                <button className={isResponding ? 'cursor-not-allowed' : 'cursor-pointer'} disabled={isResponding} datatype={'rename'} title={'改名'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onCurrentIdReName(item.id, item.name)
+                        }}>
                   <svg d="1743056965597" className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1904" width="200" height="200">
                     <path
                       d="M668.2 240.8c26-24.6 67-23.6 91.8 2.4 25 26 24 67.4-2.2 92.2L293.2 777 178 792l47.4-132.4 442.8-418.8z m156-59.2c-58.6-61.2-155.8-63.6-217.2-5.4l-450.4 426c-5 4.8-9 10.8-11.4 17.4L69.6 830.4c-5.2 14.6-2.4 30.8 7.2 43 9.8 12.2 25 18.2 40.4 16.2l201.8-26.4c9.4-1.2 18-5.4 24.8-11.8l475.2-451.6c61.8-58.8 64.2-156.6 5.2-218.2zM556.4 801c-24.6 0-44.6 20-44.6 44.6s20 44.6 44.6 44.6h356c24.6 0 44.6-20 44.6-44.6s-20-44.6-44.6-44.6h-356z"
                       p-id="1905"></path>
                   </svg>
                 </button>
-                <button datatype={'trash'} title={'删除'} onClick={(e) => {
-                  e.stopPropagation();
-                  onCurrentIdTrash(item.id, item.name)
-                }}>
+                <button className={isResponding ? 'cursor-not-allowed' : 'cursor-pointer'} disabled={isResponding} datatype={'trash'} title={'删除'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onCurrentIdTrash(item.id, item.name)
+                        }}>
                   <svg d="1743056175295" className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1742" width="200" height="200">
                     <path d="M607.897867 768.043004c-17.717453 0-31.994625-14.277171-31.994625-31.994625L575.903242 383.935495c0-17.717453 14.277171-31.994625 31.994625-31.994625s31.994625 14.277171 31.994625 31.994625l0 351.94087C639.892491 753.593818 625.61532 768.043004 607.897867 768.043004z"
                           p-id="1743"></path>
