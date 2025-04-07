@@ -130,6 +130,18 @@ a {
   text-fill-color: transparent;
 }
 
+summary {
+    list-style: none;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+summary::marker {
+    display: none; /* 针对其他浏览器移除标记 */
+}
+
 /*antd*/
 .ant-btn:hover, .ant-btn:focus {
     color: var(--primray-color);
