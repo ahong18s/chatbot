@@ -635,7 +635,12 @@ const Main: FC<IMainProps> = () => {
   const handleStop = () => {
     stopChatMessageResponding(messageTaskId).then((res: any) => {
       abortController?.abort()
-      notify({type: 'success', message: res.message || '停止响应'})//测试输出——TODO
+      setConversationIdChangeBecauseOfNew(false)
+      resetNewConversationInputs()
+      setChatNotStarted()
+      setRespondingFalse()
+
+      notify({type: 'success', message: res.message || '停止响应'})
     })
   }
 
@@ -702,6 +707,49 @@ const Main: FC<IMainProps> = () => {
     })
     notify({type: 'success', message: '重命名成功'})
   }
+
+  // 在iframe里时，如果存在显示/隐藏的逻辑，则在每次显示时显示新的对话
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      // console.log('event', event.data.action);
+      if (event.data.action === 'hide') {
+        if (isResponding && messageTaskId) {
+          handleStop();
+        }
+      } else if (event.data.action === 'show') {
+        if (conversationList.some(item => item.id === '-1')) {
+          if (currConversationId !== '-1') {
+            setCurrConversationId('-1', APP_ID);
+          }
+          return;
+        }
+        // const {data: allConversations}: any = await fetchConversations()
+        setConversationList(produce(conversationList, (draft) => {
+          draft.unshift({
+            id: '-1',
+            name: t('app.chat.newChatDefaultName'),
+            inputs: newConversationInputs,
+            introduction: conversationIntroduction,
+          })
+        }))
+        setConversationIdChangeBecauseOfNew(true)
+        setCurrConversationId('-1', APP_ID)
+        hideSidebar();
+        setCurrInputs({})
+        resetNewConversationInputs()
+        setChatNotStarted()
+        // setChatStarted()
+        // setChatList(generateNewChatListWithOpenStatement('', {}))
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    // 清理函数，防止内存泄漏
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [isResponding, messageTaskId, currConversationId, conversationList]);
 
   // 处理输入框值变化
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
