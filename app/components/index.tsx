@@ -634,7 +634,15 @@ const Main: FC<IMainProps> = () => {
 
   const handleStop = () => {
     stopChatMessageResponding(messageTaskId).then((res: any) => {
-      abortController?.abort()
+      try {
+        console.log('停止响应try');
+        console.log(abortController);
+        abortController?.abort()
+      } catch (e) {
+        console.log('停止响应catch');
+        console.log(abortController);
+        console.error(e);
+      }
       setConversationIdChangeBecauseOfNew(false)
       resetNewConversationInputs()
       setChatNotStarted()
@@ -716,31 +724,32 @@ const Main: FC<IMainProps> = () => {
         if (isResponding && messageTaskId) {
           handleStop();
         }
-      } else if (event.data.action === 'show') {
-        if (conversationList.some(item => item.id === '-1')) {
-          if (currConversationId !== '-1') {
-            setCurrConversationId('-1', APP_ID);
-          }
-          return;
-        }
-        // const {data: allConversations}: any = await fetchConversations()
-        setConversationList(produce(conversationList, (draft) => {
-          draft.unshift({
-            id: '-1',
-            name: t('app.chat.newChatDefaultName'),
-            inputs: newConversationInputs,
-            introduction: conversationIntroduction,
-          })
-        }))
-        setConversationIdChangeBecauseOfNew(true)
-        setCurrConversationId('-1', APP_ID)
-        hideSidebar();
-        setCurrInputs({})
-        resetNewConversationInputs()
-        setChatNotStarted()
-        // setChatStarted()
-        // setChatList(generateNewChatListWithOpenStatement('', {}))
       }
+      // else if (event.data.action === 'show') {
+      //   if (conversationList.some(item => item.id === '-1')) {
+      //     if (currConversationId !== '-1') {
+      //       setCurrConversationId('-1', APP_ID);
+      //     }
+      //     return;
+      //   }
+      //   // const {data: allConversations}: any = await fetchConversations()
+      //   setConversationList(produce(conversationList, (draft) => {
+      //     draft.unshift({
+      //       id: '-1',
+      //       name: t('app.chat.newChatDefaultName'),
+      //       inputs: newConversationInputs,
+      //       introduction: conversationIntroduction,
+      //     })
+      //   }))
+      //   setConversationIdChangeBecauseOfNew(true)
+      //   setCurrConversationId('-1', APP_ID)
+      //   hideSidebar();
+      //   setCurrInputs({})
+      //   resetNewConversationInputs()
+      //   setChatNotStarted()
+      //   // setChatStarted()
+      //   // setChatList(generateNewChatListWithOpenStatement('', {}))
+      // }
     };
 
     window.addEventListener('message', handleMessage);

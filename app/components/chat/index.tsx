@@ -151,7 +151,7 @@ const Chat: FC<IChatProps> = ({
       {
         !isHideSendInput && (
           <div className={cn(!feedbackDisabled && '!left-3.5 !right-3.5', 'absolute z-10 bottom-0 left-0 right-0')}>
-            {/*{
+            {
               isResponding && Boolean(messageTaskId) && (
                 <div className='flex justify-center mb-2'>
                   <button className='text-nowrap bg-white block px-3.5 py-1 rounded-md border border-slate-300' onClick={onStopResponding}>
@@ -160,7 +160,7 @@ const Chat: FC<IChatProps> = ({
                   </button>
                 </div>
               )
-            }*/}
+            }
             <div className='p-[5.5px] max-h-[150px] bg-white border-[1.5px] border-gray-200 rounded-xl overflow-y-auto'>
               {
                 visionConfig?.enabled && (

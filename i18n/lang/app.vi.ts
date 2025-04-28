@@ -6,6 +6,7 @@ const translation = {
   },
   chat: {
     newChat: 'Cuộc trò chuyện mới',
+    maxSessionLen: 'Số phiên tối đa: ',
     newChatDefaultName: 'Cuộc trò chuyện mới',
     openingStatementTitle: 'Lời mở đầu',
     powerBy: 'Được hỗ trợ bởi',

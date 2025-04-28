@@ -6,6 +6,7 @@ const translation = {
   },
   chat: {
     newChat: 'New chat',
+    maxSessionLen: 'Maximum number of sessions: ',
     newChatDefaultName: 'New conversation',
     openingStatementTitle: 'Opening statement',
     powerBy: 'Powered by',
